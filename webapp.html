@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React "Hi there!" (No Setup)</title>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #a32385;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+      #root {
+        text-align: center;
+        padding: 1rem;
+      }
+      .hello-world-title {
+        font-size: 2.25rem;
+        font-weight: bold;
+        color: #1a8b46;
+        margin-bottom: 1rem;
+        opacity: 0;          /* Initially hidden */
+        transition: opacity 0.5s ease-in-out; /* Smooth transition */
+      }
+      .hello-world-title.visible {
+        opacity: 1;          /* Make it visible */
+      }
+      .app-description {
+        font-size: 1.25rem;
+        color: #718096;
+        margin-bottom: 1.5rem;
+        opacity: 0;          /* Initially hidden */
+        transition: opacity 0.5s ease-in-out; /* Smooth transition */
+      }
+      .app-description.visible{
+        opacity: 1;
+      }
+      .click-me-button {
+        background-color: #777e2d;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.375rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        border: none;
+        font-size: 1rem;
+      }
+      .click-me-button:hover {
+        background-color: #2563eb;
+      }
+    </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+
+    const HelloWorldApp = () => {
+      const [showMessage, setShowMessage] = React.useState(false);
+
+      const handleClick = () => {
+        setShowMessage(true);
+      };
+
+      return (
+        <div>
+          <button className="click-me-button" onClick={handleClick}>
+            Click Me
+          </button>
+          <h1 className={showMessage ? "hello-world-title visible" : "hello-world-title"}>
+            Hi there!
+          </h1>
+          <p className={showMessage ? "app-description visible" : "app-description"}>
+            This is a basic react application. When first entering this page, you'll notice that clicking on the 'click me' button sends a cute little message!
+          </p>
+        </div>
+      );
+    };
+
+    ReactDOM.render(<HelloWorldApp />, document.getElementById('root'));
+
+  </script>
+</body>
+</html>
