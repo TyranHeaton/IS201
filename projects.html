@@ -60,13 +60,12 @@
                         <div class="text-center mb-4">
                             <img src="sample_historical_image.jpeg" alt="Historical Record" class="img-fluid" style="max-width: 100%; height: auto;">
                         </div>
-                        <p>For decades, people have read records like this and manually captured key details such as record type, names, location, and date. With tens of billions of records at FamilySearch, the process is time‑intensive at human scale. My role was to build AI‑driven software that extracts this information automatically.</p>
-                        <p>To achieve this, I used large language models (LLMs) and machine learning. The exact code is proprietary to FamilySearch, so I can’t share it, but I can provide pseudocode to illustrate the approach. Directly below is that approach.</p>
+                        <p>For decades, people have read records like this and manually captured key details such as record type, names, location, and date. With tens of billions of records at FamilySearch, the process is time‑intensive at human scale. My role was to build AI‑driven software that automatically extracts information like this.</p>
+                        <p>To achieve this, I used large language models (LLMs) and machine learning. The code is proprietary to FamilySearch, so I can’t share it, but I can provide pseudocode to illustrate the approach, as follows:</p>
                         
                         <h3 class="mt-5 mb-4">Image-to-Metadata AI Pipeline: Step by Step</h3>
                         <ol>
-                            <li><strong>A Request Arrives:</strong> Someone (or another system) sends a request to our web server, asking it to analyze an image and related information.</li>
-                            <li><strong>The Web Server Prepares a Unique ID:</strong> The server generates a unique identifier to track the request end-to-end.</li>
+                            <li><strong>A Request Arrives:</strong> A request is sent to our application server to analyze an image and extract the needed metadata.</li>
                             <li><strong>Prediction Request Handling:</strong>
                                 <ul>
                                     <li>If the request is for an LLM to extract data from an image, the server identifies the correct AI model (specified in the request).</li>
@@ -76,7 +75,7 @@
                                 </ul>
                                 <h5 class="mt-4 mb-3">The Predict Method</h5>
                                 <button class="btn btn-sm btn-outline-secondary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#predictMethodCode" aria-expanded="false" aria-controls="predictMethodCode">
-                                    Show/Hide Code
+                                    Show/Hide Pseudocode
                                 </button>
                                 <div class="collapse" id="predictMethodCode">
                                     <pre class="bg-light p-3 rounded"><code>When a POST request arrives at /predict:
@@ -84,22 +83,16 @@
   (default: "gpt-4.1")
 - If model is missing:
   - Return error response
-- If model is Claude:
-  - Prefix model name with "us."
 - Extract files from the request:
   - image_file: the image to analyze (required)
   - transcript_file: text transcript (optional)
   - metadata_file: metadata (optional)
-  - entities_file: entities (optional)
+  - entities_file: identified entities (optional)
 - Read contents of each file (decode as UTF-8 text)
 - Format the user prompt using transcript, metadata, and entities
 - Create an AI Broker Client instance
 - Try:
-  - If no image file:
-    - Format a prompt for text-only extraction
-    - Call AI Broker Client's openai_extract_data_noimage
-      with model, system prompt, user prompt
-  - Else if model starts with "gpt":
+  - If model starts with "gpt":
     - Prepare image file tuple (filename, bytes, mimetype)
     - Call openai_extract_data with image, model, system
       prompt, user prompt
@@ -124,13 +117,13 @@
                             <li><strong>Contacting the AI Broker:</strong>
                                 <ul>
                                     <li>The server uses a helper (the AI Broker Client) to communicate with the AI Broker service.</li>
-                                    <li>Depending on the model chosen and whether an image is included, it formats the data according to the AI model's expectations.</li>
+                                    <li>Depending on the model chosen, it formats the data according to the AI model's expectations.</li>
                                     <li>It sends the formatted data to the AI model and waits for a response.</li>
                                 </ul>
                                 <h5 class="mt-4 mb-3">AI Model Extraction Methods</h5>
                                 <h6 class="mt-3">Gemini Extraction Method</h6>
                                 <button class="btn btn-sm btn-outline-secondary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#geminiMethodCode" aria-expanded="false" aria-controls="geminiMethodCode">
-                                    Show/Hide Code
+                                    Show/Hide Pseudocode
                                 </button>
                                 <div class="collapse" id="geminiMethodCode">
                                     <pre class="bg-light p-3 rounded"><code>To extract data using Gemini:
@@ -147,7 +140,7 @@
                                 </div>
                                 <h6 class="mt-3">OpenAI Method</h6>
                                 <button class="btn btn-sm btn-outline-secondary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#openaiMethodCode" aria-expanded="false" aria-controls="openaiMethodCode">
-                                    Show/Hide Code
+                                    Show/Hide Pseudocode
                                 </button>
                                 <div class="collapse" id="openaiMethodCode">
                                     <pre class="bg-light p-3 rounded"><code>To extract data using OpenAI:
@@ -167,7 +160,7 @@
                                 </div>
                                 <h6 class="mt-3">Bedrock Model Method</h6>
                                 <button class="btn btn-sm btn-outline-secondary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#bedrockMethodCode" aria-expanded="false" aria-controls="bedrockMethodCode">
-                                    Show/Hide Code
+                                    Show/Hide Pseudocode
                                 </button>
                                 <div class="collapse" id="bedrockMethodCode">
                                     <pre class="bg-light p-3 rounded"><code>To extract data using Bedrock:
@@ -198,11 +191,11 @@
                                 </ul>
                                 <h5 class="mt-4 mb-3">Parsing Extracted Information Method</h5>
                                 <button class="btn btn-sm btn-outline-secondary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#parsingMethodCode" aria-expanded="false" aria-controls="parsingMethodCode">
-                                    Show/Hide Code
+                                    Show/Hide Pseudocode
                                 </button>
                                 <div class="collapse" id="parsingMethodCode">
                                     <pre class="bg-light p-3 rounded"><code>To parse the AI Broker response:
-- Search the response text for a block between [EXTRACTED INFORMATION] and [/EXTRACTED INFORMATION]
+- Search the response text for a particular text block formatting according to the prompt's instructions.
 - If not found:
   - Raise error: no extracted information
 - For each line in the extracted block:
