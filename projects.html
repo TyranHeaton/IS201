@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Projects - Tyran Heaton</title>
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="index.html">Tyran Heaton</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="index.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="education.html">Education</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="experience.html">Experience</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="skills.html">Skills</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="projects.html">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="extracurricular.html">Extra-Curricular</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Page Header-->
+        <header class="masthead" style="background-image: url('projects-bg.jpg')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="page-heading">
+                            <h1>Projects</h1>
+                            <span class="subheading">What have I built?</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content-->
+        <main class="mb-4">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <!-- FamilySearch Project Section -->
+                        <h2 class="text-center">What I did at FamilySearch</h2>
+                        <p class="text-center">Here is an image of an historical record</p>
+                        <div class="text-center mb-4">
+                            <img src="sample_historical_image.jpeg" alt="Historical Record" class="img-fluid" style="max-width: 100%; height: auto;">
+                        </div>
+                        <p>For decades, people have read records like this and manually captured key details such as record type, names, location, and date. With tens of billions of records at FamilySearch, the process is time‑intensive at human scale. My role was to build AI‑driven software that extracts this information automatically.</p>
+                        <p>To achieve this, I used large language models (LLMs) and machine learning. The exact code is proprietary to FamilySearch, so I can’t share it, but I can provide pseudocode to illustrate the approach. Directly below is that approach.</p>
+                        
+                        <h3 class="mt-5 mb-4">Image-to-Metadata AI Pipeline: Step by Step</h3>
+                        <ol>
+                            <li><strong>A Request Arrives:</strong> Someone (or another system) sends a request to our web server, asking it to analyze an image and related information.</li>
+                            <li><strong>The Web Server Prepares a Unique ID:</strong> The server generates a unique identifier to track the request end-to-end.</li>
+                            <li><strong>Prediction Request Handling:</strong>
+                                <ul>
+                                    <li>If the request is for an LLM to extract data from an image, the server identifies the correct AI model (specified in the request).</li>
+                                    <li>It gathers all attached files, such as the image itself, transcripts, and any supporting metadata to improve extraction accuracy.</li>
+                                    <li>It reads and validates the file contents.</li>
+                                    <li>It composes a prompt that combines the image data and contextual metadata for the AI model.</li>
+                                </ul>
+                                <h5 class="mt-4 mb-3">The Predict Method</h5>
+                                <button class="btn btn-sm btn-outline-secondary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#predictMethodCode" aria-expanded="false" aria-controls="predictMethodCode">
+                                    Show/Hide Code
+                                </button>
+                                <div class="collapse" id="predictMethodCode">
+                                    <pre class="bg-light p-3 rounded"><code>When a POST request arrives at /predict:
+- Extract the model name from request parameters or form data
+  (default: "gpt-4.1")
+- If model is missing:
+  - Return error response
+- If model is Claude:
+  - Prefix model name with "us."
+- Extract files from the request:
+  - image_file: the image to analyze (required)
+  - transcript_file: text transcript (optional)
+  - metadata_file: metadata (optional)
+  - entities_file: entities (optional)
+- Read contents of each file (decode as UTF-8 text)
+- Format the user prompt using transcript, metadata, and entities
+- Create an AI Broker Client instance
+- Try:
+  - If no image file:
+    - Format a prompt for text-only extraction
+    - Call AI Broker Client's openai_extract_data_noimage
+      with model, system prompt, user prompt
+  - Else if model starts with "gpt":
+    - Prepare image file tuple (filename, bytes, mimetype)
+    - Call openai_extract_data with image, model, system
+      prompt, user prompt
+  - Else if model starts with "gemini":
+    - Prepare image file tuple
+    - Call gemini_extract_data with image, model, system
+      prompt, user prompt
+  - Else if model starts with "us.anthropic.claude":
+    - Prepare image file tuple
+    - Call bedrock_extract_data with image, model, system
+      prompt, user prompt
+  - Else:
+    - Return error for unknown model
+- Catch any exceptions:
+  - Log the error
+  - Return error response
+- If result contains error:
+  - Return error response
+- Return result as JSON response</code></pre>
+                                </div>
+                            </li>
+                            <li><strong>Contacting the AI Broker:</strong>
+                                <ul>
+                                    <li>The server uses a helper (the AI Broker Client) to communicate with the AI Broker service.</li>
+                                    <li>Depending on the model chosen and whether an image is included, it formats the data according to the AI model's expectations.</li>
+                                    <li>It sends the formatted data to the AI model and waits for a response.</li>
+                                </ul>
+                                <h5 class="mt-4 mb-3">AI Model Extraction Methods</h5>
+                                <h6 class="mt-3">Gemini Extraction Method</h6>
+                                <button class="btn btn-sm btn-outline-secondary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#geminiMethodCode" aria-expanded="false" aria-controls="geminiMethodCode">
+                                    Show/Hide Code
+                                </button>
+                                <div class="collapse" id="geminiMethodCode">
+                                    <pre class="bg-light p-3 rounded"><code>To extract data using Gemini:
+- Build the Gemini vision endpoint URL with the model name
+- Create a payload:
+  - "contents" is a list with two items:
+    - First: system prompt as text
+    - Second: user prompt as text
+- Prepare files dictionary:
+  - "payload": JSON-encoded payload
+  - "file": image file tuple
+- Send POST request to AI Broker with files
+- Parse and return the extracted information from the response</code></pre>
+                                </div>
+                                <h6 class="mt-3">OpenAI Method</h6>
+                                <button class="btn btn-sm btn-outline-secondary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#openaiMethodCode" aria-expanded="false" aria-controls="openaiMethodCode">
+                                    Show/Hide Code
+                                </button>
+                                <div class="collapse" id="openaiMethodCode">
+                                    <pre class="bg-light p-3 rounded"><code>To extract data using OpenAI:
+- Build the OpenAI vision endpoint URL
+- Create a payload:
+  - "model": model name
+  - "input": list with one item:
+    - "role": "user"
+    - "content": list with one item:
+      - "type": "input_text"
+      - "text": system prompt + user prompt
+- Prepare files dictionary:
+  - "payload": JSON-encoded payload
+  - "file": image file tuple
+- Send POST request to AI Broker with files
+- Parse and return the extracted information from the response</code></pre>
+                                </div>
+                                <h6 class="mt-3">Bedrock Model Method</h6>
+                                <button class="btn btn-sm btn-outline-secondary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#bedrockMethodCode" aria-expanded="false" aria-controls="bedrockMethodCode">
+                                    Show/Hide Code
+                                </button>
+                                <div class="collapse" id="bedrockMethodCode">
+                                    <pre class="bg-light p-3 rounded"><code>To extract data using Bedrock:
+- Build the Bedrock vision endpoint URL with the model name
+- Create a prompt dictionary:
+  - "anthropic_version": version string
+  - "system": system prompt
+  - "messages": list with one item:
+    - "role": "user"
+    - "content": list with one item:
+      - "type": "text"
+      - "text": user prompt
+  - "max_tokens": 512
+  - "top_p": 0.9
+  - "stop_sequences": list of stop strings
+- Prepare files dictionary:
+  - "prompt": JSON-encoded prompt
+  - "file": image file tuple
+- Send POST request to AI Broker with files
+- Parse and return the extracted information from the response</code></pre>
+                                </div>
+                            </li>
+                            <li><strong>Processing the AI's Response:</strong>
+                                <ul>
+                                    <li>The server checks whether the AI broker returned an error.</li>
+                                    <li>If an error occurred, it sends back an error message to the client.</li>
+                                    <li>If successful, it organizes and structures the AI's results for further processing.</li>
+                                </ul>
+                                <h5 class="mt-4 mb-3">Parsing Extracted Information Method</h5>
+                                <button class="btn btn-sm btn-outline-secondary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#parsingMethodCode" aria-expanded="false" aria-controls="parsingMethodCode">
+                                    Show/Hide Code
+                                </button>
+                                <div class="collapse" id="parsingMethodCode">
+                                    <pre class="bg-light p-3 rounded"><code>To parse the AI Broker response:
+- Search the response text for a block between [EXTRACTED INFORMATION] and [/EXTRACTED INFORMATION]
+- If not found:
+  - Raise error: no extracted information
+- For each line in the extracted block:
+  - If line contains ":" (key-value pair):
+    - Split into key and value
+    - If value contains "unknown", skip
+    - Normalize key (lowercase, strip spaces)
+    - If key matches known fields (record type, place, date, language):
+      - Map to internal field name
+      - Add to result dictionary
+- Return the result dictionary</code></pre>
+                                </div>
+                            </li>
+                            <li><strong>Logging and Finishing Up:</strong>
+                                <ul>
+                                    <li>The server logs the request duration, status, and other diagnostic details for monitoring and debugging purposes.</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        
+                        <h3 class="mt-5 mb-4">Testing and Results</h3>
+                        <p>For LLM testing, this process runs automatically on thousands of images at a time. Once an LLM completes extraction for large datasets, the results are tested against ground truth datasets and F-scores are calculated using pre-built testing suites. F-scores measure how accurately the models extracted data from images.</p>
+                        <p>As shown in the chart below, the highest-scoring model achieved over 85% accuracy! As AI continues to improve and LLMs become more sophisticated, we're moving toward a future where manual record transcription may no longer be necessary. The test results for each LLM are displayed in the chart below.</p>
+                        
+                        <div class="table-responsive mt-4">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Model</th>
+                                        <th>Average F-Score</th>
+                                        <th>Overall F-Score</th>
+                                        <th>Incomplete Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="table-success">
+                                        <td><strong>gemini-3-pro-image-preview</strong></td>
+                                        <td><strong>85.66%</strong></td>
+                                        <td>96.14%</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>gemini-3-pro-preview</td>
+                                        <td>85.14%</td>
+                                        <td>95.87%</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>gemini-3-flash-preview</td>
+                                        <td>85.06%</td>
+                                        <td>96.67%</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>claude-opus-4-5-20251101-v1:0</td>
+                                        <td>85.05%</td>
+                                        <td>96.66%</td>
+                                        <td>117</td>
+                                    </tr>
+                                    <tr>
+                                        <td>gpt-4.1-2025-04-14</td>
+                                        <td>84.17%</td>
+                                        <td>96.70%</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>claude-opus-4-20250514-v1:0</td>
+                                        <td>83.78%</td>
+                                        <td>95.61%</td>
+                                        <td>2</td>
+                                    </tr>
+                                    <tr>
+                                        <td>gemini-2.5-pro</td>
+                                        <td>83.65%</td>
+                                        <td>96.28%</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>gpt-5.2-2025-12-11</td>
+                                        <td>83.59%</td>
+                                        <td>96.02%</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1-2025-11-13</td>
+                                        <td>83.55%</td>
+                                        <td>95.39%</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>gpt-5.1</td>
+                                        <td>83.49%</td>
+                                        <td>95.39%</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>gemini-2.5-flash</td>
+                                        <td>83.38%</td>
+                                        <td>100.00%</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>claude-opus-4-1-20250805-v1:0</td>
+                                        <td>82.59%</td>
+                                        <td>95.62%</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>claude-sonnet-4-5-20250929-v1:0</td>
+                                        <td>82.43%</td>
+                                        <td>94.91%</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>claude-3-7-sonnet-20250219-v1:0</td>
+                                        <td>82.19%</td>
+                                        <td>94.95%</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>claude-sonnet-4-20250514-v1:0</td>
+                                        <td>82.04%</td>
+                                        <td>95.65%</td>
+                                        <td>21</td>
+                                    </tr>
+                                    <tr>
+                                        <td>gemini-2.5-flash-lite</td>
+                                        <td>67.70%</td>
+                                        <td>100.00%</td>
+                                        <td>8,615</td>
+                                    </tr>
+                                    <tr class="table-warning">
+                                        <td colspan="4" class="text-center"><em>Models below this line showed poor performance</em></td>
+                                    </tr>
+                                    <tr>
+                                        <td>gpt-5-2025-08-07</td>
+                                        <td>1.52%</td>
+                                        <td>0.00%</td>
+                                        <td>465</td>
+                                    </tr>
+                                    <tr>
+                                        <td>gpt-5.2-pro-2025-12-11</td>
+                                        <td>1.52%</td>
+                                        <td>0.07%</td>
+                                        <td>1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>gpt-5-mini-2025-08-07</td>
+                                        <td>1.49%</td>
+                                        <td>0.00%</td>
+                                        <td>0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>gpt-5-nano-2025-08-07</td>
+                                        <td>1.46%</td>
+                                        <td>0.00%</td>
+                                        <td>6,945</td>
+                                    </tr>
+                                    <tr>
+                                        <td>claude-3-haiku-20240307-v1:0</td>
+                                        <td>0.00%</td>
+                                        <td>0.00%</td>
+                                        <td>5,525</td>
+                                    </tr>
+                                    <tr>
+                                        <td>gemini-2.0-flash</td>
+                                        <td>0.00%</td>
+                                        <td>0.00%</td>
+                                        <td>8,615</td>
+                                    </tr>
+                                    <tr>
+                                        <td>gemini-2.0-flash-lite</td>
+                                        <td>0.00%</td>
+                                        <td>0.00%</td>
+                                        <td>7,493</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-muted mt-2"><small><em>Note: The top-performing model (gemini-3-pro-image-preview) is highlighted in green. F-scores are displayed as percentages for easier interpretation.</em></small></p>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- Footer-->
+        <footer class="border-top">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <ul class="list-inline text-center">
+                            <li class="list-inline-item">
+                                <a href="#!">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#!">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#!">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="small text-center text-muted fst-italic">Copyright &copy; Tyran Heaton 2024</div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
+</html>
