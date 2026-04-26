@@ -28,7 +28,7 @@ a:visited {
 .bold {font-weight: bold;}
 .justify {text-align: justify;}
 .homebg {
-    background-image: url('../Images/Background_image.jpg');
+    background-image: url('../assets/img/Background_image.jpg');
     background-position: top right;
     /* background-repeat: ; */
 }
